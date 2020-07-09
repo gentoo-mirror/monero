@@ -1,4 +1,4 @@
-net-misc/xmrig 5.11.3 5.11.4 6.2.0_beta 6.2.1 6.2.2: RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner
+net-misc/xmrig 5.11.3 5.11.4 6.2.0_beta 6.2.1 6.2.2 6.2.3: RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner
 net-misc/xmrig-proxy 5.10.2 5.11.0: Monero (XMR) Stratum protocol proxy
 net-p2p/monero 0.16.0.0 0.16.0.1: The secure, private, untraceable cryptocurrency
 net-p2p/wownero 0.8.0.0 0.8.0.1: Privacy-centric meme currency
