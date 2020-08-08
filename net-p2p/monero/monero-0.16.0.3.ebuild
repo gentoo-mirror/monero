@@ -3,11 +3,13 @@
 
 EAPI=7
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="The secure, private, untraceable cryptocurrency"
 HOMEPAGE="https://www.getmonero.org https://github.com/monero-project/monero"
-SRC_URI="https://distfiles.offtopica.uk/${P}.tar.xz"
+SRC_URI=""
+EGIT_REPO_URI="https://github.com/monero-project/monero.git"
+EGIT_COMMIT="v${PV}"
 
 LICENSE="GPL-3+"
 SLOT="0"
