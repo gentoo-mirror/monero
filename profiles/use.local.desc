@@ -3,6 +3,7 @@
 # * generated automatically using pmaint *
 
 net-misc/xmrig:donate - Set the default donation level to 1% instead of 0
+net-misc/xmrig-mo:donate - Enable a default donation value of 1% CPU time instead of 0.
 net-misc/xmrig-proxy:http - Enable HTTP server for API.
 net-p2p/monero:hw-wallet - Enable if you want to use a hardware wallet like a Trezor or Ledger.
 net-p2p/wownero:hw-wallet - Enable if you want to use a hardware wallet like a Trezor or Ledger.
