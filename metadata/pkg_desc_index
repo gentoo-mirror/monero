@@ -4,7 +4,7 @@ dev-libs/monero-seed 0.1.0: 14-word mnemonic seed for Monero
 net-misc/feather 9999: A free, open-source Monero wallet
 net-misc/feather-wow 9999: A free, open-source Wownero wallet
 net-misc/xmrig 6.5.0 6.5.1: RandomX, CryptoNight, KawPow, AstroBWT, and Argon2 CPU/GPU miner
-net-misc/xmrig-mo 6.3.5: RandomX, CryptoNight, KawPow, AstroBWT and Argon2 miner for the MoneroOcean pool
+net-misc/xmrig-mo 6.5.1: RandomX, CryptoNight, KawPow, AstroBWT and Argon2 miner for the MoneroOcean pool
 net-misc/xmrig-proxy 6.3.0 6.4.0: Monero (XMR) Stratum protocol proxy
 net-p2p/monero 0.17.1.0 0.17.1.1 0.17.1.3: The secure, private, untraceable cryptocurrency
 net-p2p/wownero 0.9.0.0 0.9.0.2: Privacy-centric meme currency
