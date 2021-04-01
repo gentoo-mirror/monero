@@ -1,27 +1,40 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit cmake git-r3
+inherit cmake systemd
+
+MY_MINIUPNP_REV="4c700e09526a7d546394e85628c57e9490feefa0"
+MY_RANDOMX_REV="5ce5f4906c1eb166be980f6d83cc80f4112ffc2a"
+MY_SUPERCOP_REV="633500ad8c8759995049ccd022107d1fa8a1bbc9"
+MY_TREZOR_REV="bff7fdfe436c727982cc553bdfb29a9021b423b0"
 
 DESCRIPTION="The secure, private, untraceable cryptocurrency"
 HOMEPAGE="https://www.getmonero.org https://github.com/monero-project/monero"
-SRC_URI=""
-EGIT_REPO_URI="https://github.com/monero-project/monero.git"
-EGIT_COMMIT="v${PV}"
+SRC_URI="
+	https://github.com/monero-project/monero/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/monero-project/miniupnp/archive/${MY_MINIUPNP_REV}.tar.gz -> ${PN}-miniupnp-${PV}.tar.gz
+	https://github.com/tevador/RandomX/archive/${MY_RANDOMX_REV}.tar.gz -> ${PN}-randomx-${PV}.tar.gz
+	https://github.com/monero-project/supercop/archive/${MY_SUPERCOP_REV}.tar.gz -> ${PN}-supercop-${PV}.tar.gz
+	hw-wallet? ( https://github.com/trezor/trezor-common/archive/${MY_TREZOR_REV}.tar.gz -> ${PN}-trezor-common-${PV}.tar.gz )
+"
 
 LICENSE="BSD MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+daemon hw-wallet libressl readline tools +wallet-cli +wallet-rpc"
+IUSE="+daemon hw-wallet readline tools +wallet-cli +wallet-rpc"
 REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
+
+RESTRICT="test"
 
 DEPEND="
 	acct-group/monero
 	acct-user/monero
 	dev-libs/boost:=[nls,threads]
 	dev-libs/libsodium:=
+	dev-libs/openssl:=
+	dev-libs/rapidjson
 	net-dns/unbound:=[threads]
 	net-libs/czmq:=
 	hw-wallet? (
@@ -29,17 +42,34 @@ DEPEND="
 		dev-libs/protobuf:=
 		virtual/libusb:1
 	)
-	!libressl? ( dev-libs/openssl:= )
-	libressl? ( dev-libs/libressl:= )
 	readline? ( sys-libs/readline:0= )"
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
 
+PATCHES=(
+	"${FILESDIR}/${PN}-0.17.1.3-linkjobs.patch"
+	"${FILESDIR}/${PN}-0.17.1.9-no-git.patch"
+)
+
+src_unpack() {
+	default
+	rmdir "${S}"/external/{miniupnp,randomx,supercop,trezor-common} || die
+	mv "${WORKDIR}/miniupnp-${MY_MINIUPNP_REV}" "${S}/external/miniupnp" || die
+	mv "${WORKDIR}/RandomX-${MY_RANDOMX_REV}" "${S}/external/randomx" || die
+	mv "${WORKDIR}/supercop-${MY_SUPERCOP_REV}" "${S}/external/supercop" || die
+	use hw-wallet && (mv "${WORKDIR}/trezor-common-${MY_TREZOR_REV}" "${S}/external/trezor-common" || die)
+}
+
 src_configure() {
 	local mycmakeargs=(
+		-DBUILD_DOCUMENTATION=OFF
 		# Monero's liblmdb conflicts with the system liblmdb :(
 		-DBUILD_SHARED_LIBS=OFF
 		-DMANUAL_SUBMODULES=ON
+		-DMONERO_PARALLEL_LINK_JOBS=1
+		# The user can decide for themselves if they want to use ccache.
+		-DUSE_CCACHE=OFF
+		-DUSE_DEVICE_TREZOR=$(usex hw-wallet)
 	)
 
 	cmake_src_configure
@@ -64,6 +94,9 @@ src_install() {
 	if use daemon; then
 		dodoc utils/conf/monerod.conf
 
+		# TODO: Ensure the existence and owner of these directories in the
+		# service filem not here.
+
 		# data-dir
 		keepdir /var/lib/monero
 		fowners monero:monero /var/lib/monero
@@ -81,6 +114,9 @@ src_install() {
 		# OpenRC
 		newconfd "${FILESDIR}/monerod-0.16.0.3-r1.confd" monerod
 		newinitd "${FILESDIR}/monerod-0.16.0.3-r1.initd" monerod
+
+		# systemd
+		systemd_newunit "${FILESDIR}/monerod-0.17.1.5.service" monerod.service
 	fi
 }
 
