@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake
+inherit cmake optfeature
 
 DESCRIPTION="RandomX, CryptoNight, KawPow, AstroBWT, and Argon2 CPU/GPU miner"
 HOMEPAGE="https://xmrig.com https://github.com/xmrig/xmrig"
@@ -22,7 +22,6 @@ DEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-5.11.2-nonotls.patch"
-	"${FILESDIR}/${PN}-6.10.0-missing-include.patch"
 )
 
 src_prepare() {
@@ -46,8 +45,5 @@ src_install() {
 }
 
 pkg_postinst() {
-	einfo "Install sys-apps/msr-tools and load the msr kernel module so that"
-	einfo "XMRig can perform CPU specific tweaks like disabling the instruction"
-	einfo "prefetcher. Also remember to increase the vm.nr_hugepages sysctl"
-	einfo "value so that XMRig can allocate with huge pages."
+	optfeature "cpu specific tweaks" sys-apps/msr-tools
 }
