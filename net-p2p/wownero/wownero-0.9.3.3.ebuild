@@ -108,6 +108,6 @@ pkg_postinst() {
 		einfo
 		einfo "systemd users can use 'systemctl start wownerod'"
 		einfo
-		einfo "Run wownerodd status as any user to get sync status and other stats."
+		einfo "Run wownerod status as any user to get sync status and other stats."
 	fi
 }
