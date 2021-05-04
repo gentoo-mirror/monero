@@ -55,11 +55,12 @@ src_unpack() {
 
 src_configure() {
 	local mycmakeargs=(
+		-DBUILD_DEBUG_UTILITIES=ON
 		-DBUILD_DOCUMENTATION=OFF
 		# Monero's liblmdb conflicts with the system liblmdb :(
 		-DBUILD_SHARED_LIBS=OFF
 		-DMANUAL_SUBMODULES=ON
-		-DMONERO_PARALLEL_LINK_JOBS=1
+		-DWOWNERO_PARALLEL_LINK_JOBS=1
 		# The user can decide for themselves if they want to use ccache.
 		-DUSE_CCACHE=OFF
 		-DUSE_DEVICE_TREZOR=OFF
