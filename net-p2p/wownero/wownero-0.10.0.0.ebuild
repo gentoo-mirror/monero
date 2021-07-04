@@ -5,17 +5,17 @@ EAPI=7
 
 inherit cmake systemd
 
-MY_MINIUPNP_REV="4c700e09526a7d546394e85628c57e9490feefa0"
-MY_RANDOMWOW_REV="89b7c02bba9100f5ed60056b1e7a82b742af56ce"
+MY_MINIUPNP_REV="544e6fcc73c5ad9af48a8985c94f0f1d742ef2e0"
+MY_RANDOMWOW_REV="62c6ea1176f6e3085a04e3c72b174c776b7981d9"
 MY_SUPERCOP_REV="633500ad8c8759995049ccd022107d1fa8a1bbc9"
 
 DESCRIPTION="Privacy-centric meme currency"
 HOMEPAGE="https://www.wownero.org https://git.wownero.com/wownero/wownero"
 SRC_URI="
 	https://git.wownero.com/wownero/wownero/archive/v${PV}.tar.gz -> ${P}.tar.gz
-	https://git.wownero.com/wownero/miniupnp/archive/${MY_MINIUPNP_REV}.tar.gz -> ${PN}-miniupnp-${MY_MINIUPNP_REV}.tar.gz
+	https://github.com/miniupnp/miniupnp/archive/${MY_MINIUPNP_REV}.tar.gz -> ${PN}-miniupnp-${PV}.tar.gz
 	https://git.wownero.com/wownero/RandomWOW/archive/${MY_RANDOMWOW_REV}.tar.gz -> ${PN}-randomwow-${MY_RANDOMWOW_REV}.tar.gz
-	https://git.wownero.com/wownero/supercop/archive/${MY_SUPERCOP_REV}.tar.gz -> ${PN}-supercop-${MY_SUPERCOP_REV}.tar.gz
+	https://github.com/monero-project/supercop/archive/${MY_SUPERCOP_REV}.tar.gz -> ${PN}-supercop-${PV}.tar.gz
 "
 S="${WORKDIR}/${PN}"
 
@@ -28,7 +28,7 @@ REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
 RESTRICT="test"
 
 DEPEND="
-	dev-libs/boost:0/1.75.0[nls,threads]
+	dev-libs/boost:=[nls,threads]
 	dev-libs/libsodium:=
 	dev-libs/openssl:=
 	dev-libs/rapidjson
@@ -48,9 +48,9 @@ PATCHES=(
 src_unpack() {
 	default
 	rmdir "${S}"/external/{miniupnp,RandomWOW,supercop} || die
-	mv "${WORKDIR}/miniupnp" "${S}/external/miniupnp" || die
+	mv "${WORKDIR}/miniupnp-${MY_MINIUPNP_REV}" "${S}/external/miniupnp" || die
 	mv "${WORKDIR}/randomwow" "${S}/external/RandomWOW" || die
-	mv "${WORKDIR}/supercop" "${S}/external/supercop" || die
+	mv "${WORKDIR}/supercop-${MY_SUPERCOP_REV}" "${S}/external/supercop" || die
 }
 
 src_configure() {
