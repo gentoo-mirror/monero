@@ -7,6 +7,6 @@ acct-user/xmrig-proxy 0: System user: xmrig-proxy
 dev-libs/monero-seed 0.1.0: 14-word mnemonic seed for Monero
 net-misc/feather 9999: A free, open-source Monero wallet
 net-misc/xmrig-mo 6.5.1: RandomX, CryptoNight, KawPow, AstroBWT and Argon2 miner for the MoneroOcean pool
-net-misc/xmrig-proxy 6.12.0 6.12.0-r1 6.13.0: Monero (XMR) Stratum protocol proxy
+net-misc/xmrig-proxy 6.14.0: Monero (XMR) Stratum protocol proxy
 net-p2p/monero 0.17.2.0: The secure, private, untraceable cryptocurrency
 net-p2p/wownero 0.10.0.0: Privacy-centric meme currency
