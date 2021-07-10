@@ -22,7 +22,10 @@ RDEPEND="
 	acct-group/xmrig-proxy
 	acct-user/xmrig-proxy"
 
-PATCHES=( "${FILESDIR}/${PN}-5.10.2-nonotls.patch" )
+PATCHES=(
+	"${FILESDIR}/${PN}-5.10.2-nonotls.patch"
+	"${FILESDIR}/${PN}-6.14.0-missing-include.patch"
+)
 
 src_configure() {
 	local mycmakeargs=(
