@@ -1,7 +1,7 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake systemd
 
@@ -28,7 +28,7 @@ REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
 RESTRICT="test"
 
 DEPEND="
-	dev-libs/boost:=[nls,threads]
+	dev-libs/boost:=[nls,threads(+)]
 	dev-libs/libsodium:=
 	dev-libs/openssl:=
 	dev-libs/rapidjson
@@ -55,6 +55,7 @@ src_unpack() {
 
 src_configure() {
 	local mycmakeargs=(
+		# They may not actually be built (see make targets)
 		-DBUILD_DEBUG_UTILITIES=ON
 		-DBUILD_DOCUMENTATION=OFF
 		# Monero's liblmdb conflicts with the system liblmdb :(
@@ -76,6 +77,7 @@ src_compile() {
 	use wallet-cli && targets+=(simplewallet)
 	use wallet-rpc && targets+=(wallet_rpc_server)
 	cmake_build ${targets[@]}
+	local targets=()
 }
 
 src_install() {
@@ -86,29 +88,27 @@ src_install() {
 		done
 
 	if use daemon; then
-		dodoc utils/conf/wownerod.conf
+		insinto /etc/${PN}
+		newins "${FILESDIR}"/${PN}d-0.9.2.2.${PN}d.conf ${PN}d.conf
 
-		# /etc/wownero/wownerod.conf
-		insinto /etc/wownero
-		newins "${FILESDIR}/wownerod-0.9.2.2.wownerod.conf" wownerod.conf
+		newconfd "${FILESDIR}"/${PN}d-0.9.2.2.confd ${PN}d
+		newinitd "${FILESDIR}"/${PN}d-0.9.2.2.initd ${PN}d
 
-		# OpenRC
-		newconfd "${FILESDIR}/wownerod-0.9.2.2.confd" wownerod
-		newinitd "${FILESDIR}/wownerod-0.9.2.2.initd" wownerod
-
-		# systemd
-		systemd_newunit "${FILESDIR}/wownerod-0.9.2.2.service" wownerod.service
+		systemd_newunit "${FILESDIR}"/${PN}d-0.9.2.2.service ${PN}d.service
 	fi
 }
 
 pkg_postinst() {
 	if use daemon; then
-		einfo "Start the Monero P2P daemon as a system service with"
+		einfo "Start the Wownero P2P daemon as a system service with"
 		einfo "'rc-service wownerod start'. Enable it at startup with"
 		einfo "'rc-update add wownerod default'."
 		einfo
-		einfo "systemd users can use 'systemctl start wownerod'"
+		einfo "Run wownero status as any user to get sync status and other stats."
 		einfo
-		einfo "Run wownerod status as any user to get sync status and other stats."
+		einfo "The Monero blockchain can take up a lot of space (80 GiB) and is stored"
+		einfo "in /var/lib/wownero by default. You may want to enable pruning by adding"
+		einfo "'prune-blockchain=1' to /etc/wownero/wownerod.conf to prune the blockchain"
+		einfo "or move the data directory to another disk."
 	fi
 }
