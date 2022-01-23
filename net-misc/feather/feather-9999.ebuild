@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -15,12 +15,13 @@ EGIT_REPO_URI="https://git.featherwallet.org/feather/feather.git"
 LICENSE="BSD MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="xmrig +xmrto"
+IUSE="qrcode xmrig"
 
 DEPEND="
-	dev-libs/boost:=[nls,threads]
+	dev-libs/boost:=[nls]
 	dev-libs/libgcrypt:=
 	dev-libs/libsodium:=
+	dev-libs/libzip:=
 	dev-libs/monero-seed
 	dev-libs/openssl:=
 	>=dev-qt/qtcore-5.15
@@ -33,10 +34,12 @@ DEPEND="
 	media-gfx/qrencode:=
 	net-dns/unbound:=[threads]
 	net-libs/czmq:=
+	qrcode? ( media-gfx/zbar:=[v4l] )
 "
 RDEPEND="
 	${DEPEND}
 	net-vpn/tor
+	xmrig? ( net-misc/xmrig )
 "
 BDEPEND="virtual/pkgconfig"
 
@@ -47,14 +50,12 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=Off # Vendored Monero libs collision
 		-DBUILD_TAG="linux-x64"
 		-DBUILD_TESTS=OFF
-		-DBUILD_TOR=OFF
 		-DDONATE_BEG=OFF
 		-DINSTALL_VENDORED_LIBUNBOUND=OFF
 		-DMANUAL_SUBMODULES=1
 		-DSTATIC=OFF
 		-DUSE_DEVICE_TREZOR=OFF
-		-DXMRTO=$(usex xmrto)
-		-DXMRig=$(usex xmrig)
+		-DXMRIG=$(usex xmrig)
 	)
 
 	cmake_src_configure
