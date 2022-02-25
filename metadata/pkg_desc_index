@@ -9,5 +9,5 @@ dev-libs/randomx 1.1.9-r1: Proof of work algorithm based on random code executio
 net-misc/feather 9999: A free, open-source Monero wallet
 net-misc/xmrig-mo 6.5.1: RandomX, CryptoNight, KawPow, AstroBWT and Argon2 miner for the MoneroOcean pool
 net-misc/xmrig-proxy 6.15.0: Monero (XMR) Stratum protocol proxy
-net-p2p/monero 0.17.2.0-r1 0.17.2.3 0.17.3.0: The secure, private, untraceable cryptocurrency
-net-p2p/wownero 0.10.1.0: Privacy-centric meme currency
+net-p2p/monero 0.17.3.0-r1: The secure, private, untraceable cryptocurrency
+net-p2p/wownero 0.10.1.0-r1: Privacy-centric meme currency
