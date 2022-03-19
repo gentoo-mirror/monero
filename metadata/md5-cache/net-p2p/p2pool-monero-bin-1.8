@@ -1,0 +1,9 @@
+DEFINED_PHASES=install postinst unpack
+DESCRIPTION=Decentralized pool for Monero mining
+EAPI=8
+HOMEPAGE=https://p2pool.io https://github.com/SChernykh/p2pool
+KEYWORDS=-* ~amd64 ~arm64
+LICENSE=BSD GPL-3+ ISC LGPL-3+ MIT
+SLOT=0
+SRC_URI=amd64? ( https://github.com/SChernykh/p2pool/releases/download/v1.8/p2pool-v1.8-linux-x64.tar.gz ) arm64? ( https://github.com/SChernykh/p2pool/releases/download/v1.8/p2pool-v1.8-linux-aarch64.tar.gz )
+_md5_=ae626f08d48482cc4d947250f652a86d
